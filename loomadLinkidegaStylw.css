@@ -1,0 +1,28 @@
+div#menu
+{
+    padding: 3%;
+    float:left;
+    background-color: #FAEBD7;
+}
+div#info
+{
+    padding: 3%;
+    float: left;
+    margin-left: 5%;
+    background-color: #FAEBD7;
+}
+div#line
+{
+    padding: 3%;
+    padding-top: 20%;
+    float: left;
+    border-right: solid 5px #A52A2A;
+}
+div#infoSisu
+{
+    float: left;
+}
+img
+{
+    width: 150px;
+}
