@@ -16,9 +16,12 @@ if (isset($_REQUEST['kustuta']))
     $paring->execute();
 }
 
-$paring=$yhendus->prepare("SELECT Id, linnaNimi, rahvastik, linnaPeaId FROM linnad");
-$paring->bind_result($id, $linnaNimi, $rahvastik, $linnaPeaId);
+
+$paring=$yhendus->prepare("SELECT Id, linnaNimi, rahvastik, linnapea.linnaPea FROM linnad, linnapea where linnad.linnaPeaId=linnapea.linnaPeaId");
+$paring->bind_result($id, $linnaNimi, $rahvastik, $linnaPea);
 $paring->execute();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -30,13 +33,15 @@ $paring->execute();
 </head>
 <body>
 <header>
-    <h1>Linna tabel</h1>
+    <h1>Eesti Linnad</h1>
+    <a style='font-size: 20pt; color: #A52A2A' href='https://github.com/Timosha145/linnad.git'>Github</a>
+    <br>
 </header>
 
 <div id="menu">
-    <h3>Linna nimed</h3>
+    <h3>Linnade nimed</h3>
     <?php
-
+    
     //näitab loomade loetelu tabelist loomad
     echo "<ul>";
     while($paring->fetch())
@@ -55,10 +60,10 @@ $paring->execute();
     <?php
     if (isset($_REQUEST['id']))
     {
-        $paring=$yhendus->prepare("SELECT  linnaNimi, rahvastik, linnaPeaId FROM linnad WHERE id=?");
+        $paring=$yhendus->prepare("SELECT linnaNimi, rahvastik, linnapea.linnaPea FROM linnad, linnapea WHERE id=? && linnapea.linnaPeaId=linnad.linnaPeaId ");
         $paring->bind_param('i', $_REQUEST['id']);
         //küsimärki asemel aadressiribalt tuleb id
-        $paring->bind_result( $linnaNimi, $rahvastik, $linnaPeaId);
+        $paring->bind_result( $linnaNimi, $rahvastik, $linnaPea);
         $paring->execute();
 
         //$paring=$yhendus->prepare("SELECT linnaPea FROM linnapea WHERE linnaPeaId=?");
@@ -71,7 +76,7 @@ $paring->execute();
         {
             echo "<div id='infoSisu'>"."<strong>Linn: </strong>".htmlspecialchars($linnaNimi)."<br>";
             echo "<strong>Rahvastik: </strong>".htmlspecialchars($rahvastik)." inimest<br>";
-            echo "<strong>Linnapea Id: </strong>".htmlspecialchars($linnaPeaId)."<br>";
+            echo "<strong>Linnapea: </strong>".htmlspecialchars($linnaPea)."<br>";
             echo "<a  style='font-size: 16pt; color: #A52A2A' href='?kustuta=".$_REQUEST['id']."'><strong>Kustuta</strong></a>";
             echo "</div>";
         }
